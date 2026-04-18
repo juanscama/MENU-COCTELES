@@ -263,9 +263,7 @@ async function enviarPedido(){
   if(!mesa){alert("Por favor ingresa el número de mesa");return;}
   const its=cocteles.map((c,i)=>{return{...c,qty:carrito[i]};}).filter(x=>x.qty>0);
   if(!its.length){alert("No hay ítems en el pedido");return;}
-  const lineas=its.map(x=>"  • "+x.n+" x"+x.qty+" = $"+(x.p*x.qty)).join("\n");
-  const t=its.reduce((s,x)=>s+(x.p*x.qty),0);
-  const msg="🍹 *NUEVO PEDIDO*\n\n"+lineas+"\n\n💰 Total: $"+(t)+"\n🪑 Mesa: "+mesa+"\n💳 Pago: "+(metodo==="nequi"?"Nequi":"Bancolombia")+(notas?"\n📝 Nota: "+notas:"");
+  let totalMsg=0;const lineas=its.map(x=>{const sub=x.p*x.qty;totalMsg+=sub;return "  • "+x.n+" x"+x.qty+" = $"+sub;}).join("\n");const msg="🍹 *NUEVO PEDIDO*\n\n"+lineas+"\n\n💰 Total: $"+totalMsg+"\n🪑 Mesa: "+mesa+"\n💳 Pago: "+(metodo==="nequi"?"Nequi":"Bancolombia")+(notas?"\n📝 Nota: "+notas:"");
   const url="https://api.callmebot.com/whatsapp.php?phone=573146228049&text="+encodeURIComponent(msg)+"&apikey=8599273";
   try{await fetch(url,{mode:"no-cors"});}catch(e){}
   document.getElementById("form-view").style.display="none";

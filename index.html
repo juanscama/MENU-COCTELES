@@ -257,17 +257,57 @@ function cerrarReset(){
   cerrar();
 }
 
-async function enviarPedido(){
-  const mesa=document.getElementById("mesa").value;
-  const notas=document.getElementById("notas").value;
-  if(!mesa){alert("Por favor ingresa el número de mesa");return;}
-  const its=cocteles.map((c,i)=>{return{...c,qty:carrito[i]};}).filter(x=>x.qty>0);
-  if(!its.length){alert("No hay ítems en el pedido");return;}
-  let totalMsg=0;const lineas=its.map(x=>{const sub=x.p*x.qty;totalMsg+=sub;return "  * "+x.n+" x"+x.qty+" = "+fmt(sub);}).join("\n");const msg="NUEVO PEDIDO\n\n"+lineas+"\n\nTotal: "+fmt(totalMsg)+"\nMesa: "+mesa+"\nPago: "+(metodo==="nequi"?"Nequi":"Bancolombia")+(notas?"\nNota: "+notas:"");
-  const url="https://api.callmebot.com/whatsapp.php?phone=573146228049&text="+encodeURIComponent(msg)+"&apikey=8599273";
-  try{await fetch(url,{mode:"no-cors"});}catch(e){}
-  document.getElementById("form-view").style.display="none";
-  document.getElementById("success-view").style.display="block";
+async function enviarPedido() {
+  const mesa = document.getElementById("mesa").value;
+  const notas = document.getElementById("notas").value;
+  if (!mesa) { alert("Por favor ingresa el número de mesa"); return; }
+
+  const its = cocteles.map((c, i) => ({ ...c, qty: carrito[i] })).filter(x => x.qty > 0);
+  if (!its.length) { alert("No hay ítems en el pedido"); return; }
+
+  let totalMsg = 0;
+  const lineas = its.map(x => {
+    const sub = x.p * x.qty;
+    totalMsg += sub;
+    return `  * ${x.n} x${x.qty} = ${fmt(sub)}`;
+  }).join("\n");
+
+  const msg = `🛎️ *NUEVO PEDIDO* 🛎️\n\n${lineas}\n\n💵 *Total: ${fmt(totalMsg)}*\n🪑 *Mesa: ${mesa}*\n💳 *Pago: ${metodo === "nequi" ? "Nequi" : "Bancolombia"}*\n${notas ? `📝 *Nota: ${notas}*` : ""}`;
+
+  // ⚙️ CONFIGURACIÓN - REEMPLAZA CON TUS DATOS
+  const TELEGRAM_TOKEN = '8513311150:AAE87aVBXkI_pN7zjiwQTZd4_KjlFn6SIgc';
+  const TELEGRAM_CHAT_ID = '6646169532';
+  // -------------------------------------------
+
+  const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: msg,
+        parse_mode: 'Markdown'
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error al enviar a Telegram:', errorData);
+      alert('Hubo un problema al enviar el pedido. Revisa la consola.');
+      return;
+    }
+
+  } catch (error) {
+    console.error('Error de red:', error);
+    alert('No se pudo conectar con Telegram.');
+    return;
+  }
+
+  document.getElementById("form-view").style.display = "none";
+  document.getElementById("success-view").style.display = "block";
+}
 }
 
 document.getElementById("overlay").addEventListener("click",function(e){if(e.target===this)cerrar();});

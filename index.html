@@ -269,10 +269,10 @@ async function enviarPedido() {
   const lineas = its.map(x => {
     const sub = x.p * x.qty;
     totalMsg += sub;
-    return `  * ${x.n} x${x.qty} = ${fmt(sub)}`;
+    return `  • ${x.n} x${x.qty} = ${fmt(sub)}`;
   }).join("\n");
 
-  const msg = `🛎️ *NUEVO PEDIDO* 🛎️\n\n${lineas}\n\n💵 *Total: ${fmt(totalMsg)}*\n🪑 *Mesa: ${mesa}*\n💳 *Pago: ${metodo === "nequi" ? "Nequi" : "Bancolombia"}*\n${notas ? `📝 *Nota: ${notas}*` : ""}`;
+  const msg = `🛎️ *NUEVO PEDIDO* 🛎️\n\n${lineas}\n\n💵 *Total: ${fmt(totalMsg)}*\n🪑 *Mesa: ${mesa}*\n💳 *Pago: ${metodo === "nequi" ? "Nequi" : "Bancolombia"}*${notas ? `\n📝 *Nota: ${notas}*` : ""}`;
 
   // ⚙️ CONFIGURACIÓN - REEMPLAZA CON TUS DATOS
   const TELEGRAM_TOKEN = '8513311150:AAE87aVBXkI_pN7zjiwQTZd4_KjlFn6SIgc';
@@ -307,7 +307,6 @@ async function enviarPedido() {
 
   document.getElementById("form-view").style.display = "none";
   document.getElementById("success-view").style.display = "block";
-}
 }
 
 document.getElementById("overlay").addEventListener("click",function(e){if(e.target===this)cerrar();});

@@ -28,7 +28,18 @@ body{font-family:system-ui,sans-serif;background:#000000;color:#f0e6d3;min-heigh
 .divider{width:60px;height:1px;background:#6b3a1f;margin:16px auto 0}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:16px 12px;max-width:960px;margin:0 auto;padding-bottom:100px}
 .card{border-radius:16px;overflow:hidden}
-.card-img{width:100%;height:170px;display:flex;align-items:center;justify-content:center;font-size:56px}
+.card-img{
+  width:100%;
+  height:170px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:56px;
+  background-color:#1a0c0e;   /* color de fondo mientras carga la imagen */
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
 .card-body{padding:16px 18px 20px}
 .card-name{font-size:18px;font-weight:500;color:#ffffff}
 .card-price{font-size:15px;color:#ffffff;margin-top:4px;font-weight:500;opacity:0.85}

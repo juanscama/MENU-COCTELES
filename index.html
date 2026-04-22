@@ -270,8 +270,9 @@ const items=()=>cocteles.reduce((s,_,i)=>s+carrito[i],0);
 
 function renderMenu(){
   document.getElementById("menu").innerHTML=cocteles.map((c,i)=>`
-    <div class="card ${i === 0 ? 'promo' : ''}" style="background:${c.bg};border:0.5px solid ${c.border}">
-      <div class="card-img" style="background-image: url('${c.img}'); background-size: cover; background-position: center;"></div>
+   <div class="card ${i === 0 ? 'promo' : ''}" style="background:${c.bg};border:0.5px solid ${c.border}">
+  ${i === 0 ? '<div class="promo-badge">2x1</div>' : ''}
+  <div class="card-img" style="background-image: url('${c.img}'); background-size: cover; background-position: center;"></div>
       <div class="card-body">
         <div class="card-name">${c.n}</div>
         <div class="card-price">${fmt(c.p)}</div>

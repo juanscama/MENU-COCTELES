@@ -398,28 +398,21 @@ async function enviarPedido() {
 
   const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`;
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: msg,
-        parse_mode: 'Markdown'
-      })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error('Error al enviar a Telegram:', errorData);
-      alert('Hubo un problema al enviar el pedido. Revisa la consola.');
-      return;
+    // Enviar a todos los chats configurados
+  for (const chatId of TELEGRAM_CHAT_IDS) {
+    try {
+      const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: 'Markdown' })
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error Telegram al enviar a ' + chatId, errorData);
+      }
+    } catch (error) {
+      console.error('Error de red al enviar a ' + chatId, error);
     }
-
-  } catch (error) {
-    console.error('Error de red:', error);
-    alert('No se pudo conectar con Telegram.');
-    return;
   }
 
   document.getElementById("form-view").style.display = "none";
